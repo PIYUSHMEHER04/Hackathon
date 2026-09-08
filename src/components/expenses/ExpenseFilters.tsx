@@ -28,7 +28,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
   totalFilteredAmount,
 }) => {
   return (
-    <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 shadow-sm mb-6 space-y-4">
+    <div className="rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-5 shadow-sm mb-6 space-y-4">
       {/* Top row: Search and Export buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Search input */}
@@ -39,7 +39,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
             value={filters.searchQuery}
             onChange={(e) => onFilterChange({ ...filters, searchQuery: e.target.value })}
             placeholder="Search by description (e.g. Mess, Auto, Xerox)..."
-            className="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/70 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/70 dark:bg-black/30 text-slate-900 dark:text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
@@ -47,7 +47,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onExportCSV}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-white/10 transition-colors"
             title="Download CSV"
           >
             <Download className="w-3.5 h-3.5" />
@@ -55,7 +55,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           </button>
           <button
             onClick={onPrintReport}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-white/10 transition-colors"
             title="Print Monthly Financial Report"
           >
             <Printer className="w-3.5 h-3.5" />
@@ -65,7 +65,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
       </div>
 
       {/* Bottom row: Category Filter, Payment Filter, Sort */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs">
         <div className="flex flex-wrap items-center gap-2">
           {/* Category Dropdown */}
           <div className="flex items-center gap-1.5">
@@ -73,11 +73,11 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
             <select
               value={filters.selectedCategory}
               onChange={(e) => onFilterChange({ ...filters, selectedCategory: e.target.value })}
-              className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#151928] text-slate-700 dark:text-slate-200 font-bold focus:outline-none"
             >
               <option value="all">All Categories</option>
               {CATEGORY_LIST.map((c) => (
-                <option key={c.id} value={c.id}>
+                <option key={c.id} value={c.id} className="bg-slate-900 text-white">
                   {c.emoji} {c.label}
                 </option>
               ))}
@@ -88,7 +88,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
           <select
             value={filters.paymentFilter}
             onChange={(e) => onFilterChange({ ...filters, paymentFilter: e.target.value })}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium focus:outline-none"
+            className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#151928] text-slate-700 dark:text-slate-200 font-bold focus:outline-none"
           >
             <option value="all">All Payment Modes</option>
             <option value="UPI">UPI</option>
@@ -102,7 +102,7 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
             <select
               value={filters.sortBy}
               onChange={(e) => onFilterChange({ ...filters, sortBy: e.target.value as any })}
-              className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium focus:outline-none"
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#151928] text-slate-700 dark:text-slate-200 font-bold focus:outline-none"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
@@ -113,9 +113,9 @@ export const ExpenseFilters: React.FC<ExpenseFiltersProps> = ({
         </div>
 
         {/* Counter Summary */}
-        <div className="text-slate-500 dark:text-slate-400 font-medium">
-          Showing <strong>{totalFilteredCount}</strong> expenses (Total:{' '}
-          <strong className="text-slate-900 dark:text-white font-mono">
+        <div className="text-slate-400 font-medium">
+          Showing <strong className="text-slate-200">{totalFilteredCount}</strong> expenses (Total:{' '}
+          <strong className="text-emerald-400 font-mono">
             ₹{totalFilteredAmount.toLocaleString('en-IN')}
           </strong>
           )

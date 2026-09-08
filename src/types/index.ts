@@ -31,10 +31,21 @@ export interface Expense {
   createdAt: number;
 }
 
+export interface SavingsGoal {
+  id: string;
+  title: string;
+  targetAmount: number;
+  currentAmount: number;
+  emoji: string;
+  notes?: string;
+  createdAt: number;
+}
+
 export interface MonthlyBudget {
   month: string; // YYYY-MM
   totalBudget: number;
   weeklyBudget?: number;
+  savingsTarget?: number; // Target savings for the month
   notes?: string;
   primaryCategories?: CategoryId[];
 }
@@ -85,6 +96,7 @@ export interface Achievement {
 
 export interface UserPreferences {
   theme: 'light' | 'dark';
+  themePalette?: 'emerald' | 'violet' | 'cyan';
   hasCompletedOnboarding: boolean;
   demoModeActive: boolean;
   studentName?: string;
@@ -94,6 +106,7 @@ export interface UserPreferences {
 export interface AppState {
   budgets: Record<string, MonthlyBudget>; // month -> budget
   expenses: Expense[];
+  savingsGoals: SavingsGoal[];
   preferences: UserPreferences;
   selectedMonth: string; // YYYY-MM
 }

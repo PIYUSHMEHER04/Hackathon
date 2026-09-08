@@ -30,19 +30,19 @@ export const RecentExpenses: React.FC = () => {
   };
 
   return (
-    <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
+    <div className="rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-6 shadow-sm">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-            Activity Feed
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            Activity Ledger
           </span>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Expenses</h3>
+          <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">Recent Expenses</h3>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={openAddExpense}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 font-semibold text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/25 font-bold text-xs transition-colors"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
             <span>Add</span>
@@ -50,7 +50,7 @@ export const RecentExpenses: React.FC = () => {
           {currentMonthExpenses.length > 5 && (
             <button
               onClick={() => setActiveTab('expenses')}
-              className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700"
+              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300"
             >
               <span>View all ({currentMonthExpenses.length})</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -65,18 +65,18 @@ export const RecentExpenses: React.FC = () => {
           description="Track your mess dinner, transit, or books to monitor your daily allowance."
         />
       ) : (
-        <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
+        <div className="divide-y divide-slate-100 dark:divide-white/[0.04]">
           {recent.map((exp) => {
             const cat = getCategory(exp.categoryId);
             return (
               <div
                 key={exp.id}
-                className="group flex items-center justify-between py-3.5 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 px-2.5 rounded-2xl transition-all"
+                className="group flex items-center justify-between py-3.5 hover:bg-slate-50 dark:hover:bg-white/[0.02] px-3 rounded-2xl transition-all"
               >
                 {/* Left: Icon & Info */}
                 <div className="flex items-center gap-3.5 min-w-0">
                   <div
-                    className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0 border ${cat.bgLight} ${cat.borderColor}`}
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0 border border-white/10 bg-white/[0.04]"
                   >
                     {cat.emoji}
                   </div>
@@ -85,7 +85,7 @@ export const RecentExpenses: React.FC = () => {
                       {exp.description || cat.label}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-                      <span className="font-medium text-slate-600 dark:text-slate-300">
+                      <span className="font-semibold text-slate-300">
                         {cat.label}
                       </span>
                       <span>•</span>
@@ -93,7 +93,7 @@ export const RecentExpenses: React.FC = () => {
                       {exp.paymentMethod && (
                         <>
                           <span>•</span>
-                          <span className="px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold text-slate-500 uppercase">
+                          <span className="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/10 text-[10px] font-bold text-emerald-400 uppercase font-mono">
                             {exp.paymentMethod}
                           </span>
                         </>
@@ -104,14 +104,14 @@ export const RecentExpenses: React.FC = () => {
 
                 {/* Right: Amount & Actions */}
                 <div className="flex items-center gap-3 shrink-0 ml-3">
-                  <span className="text-base font-extrabold text-slate-900 dark:text-white font-mono">
+                  <span className="text-base font-black text-slate-900 dark:text-white font-mono">
                     ₹{exp.amount.toLocaleString('en-IN')}
                   </span>
 
                   <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => openEditExpense(exp)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-white/[0.06] transition-colors"
                       title="Edit expense"
                       aria-label="Edit expense"
                     >
@@ -119,7 +119,7 @@ export const RecentExpenses: React.FC = () => {
                     </button>
                     <button
                       onClick={() => setExpenseToDelete(exp)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/[0.06] transition-colors"
                       title="Delete expense"
                       aria-label="Delete expense"
                     >

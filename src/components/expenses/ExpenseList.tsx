@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Plus, Edit2, Trash2, Tag, Calendar, Wallet } from 'lucide-react';
+import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { useBudget } from '../../context/BudgetContext';
 import { Expense } from '../../types';
 import { getCategory } from '../../constants/categories';
@@ -16,6 +16,7 @@ export const ExpenseList: React.FC = () => {
     deleteExpense,
     selectedMonth,
     currentBudget,
+    themePalette,
   } = useBudget();
 
   const [filters, setFilters] = useState<FilterState>({
@@ -83,6 +84,13 @@ export const ExpenseList: React.FC = () => {
     triggerPrintReport();
   };
 
+  const primaryBtnClass =
+    themePalette === 'emerald'
+      ? 'bg-emerald-500 hover:bg-emerald-400 shadow-emerald-500/25'
+      : themePalette === 'violet'
+      ? 'bg-purple-600 hover:bg-purple-500 shadow-purple-600/25'
+      : 'bg-cyan-500 hover:bg-cyan-400 shadow-cyan-500/25';
+
   return (
     <div className="space-y-6">
       {/* Header bar */}
@@ -92,13 +100,13 @@ export const ExpenseList: React.FC = () => {
             All Expenses
           </h2>
           <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage, edit, search, and audit your student spending records.
+            Audit, filter, and export your college spending transactions.
           </p>
         </div>
 
         <button
           onClick={openAddExpense}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 transition-all active:scale-95 self-start sm:self-auto"
+          className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-white font-bold text-sm shadow-lg transition-all active:scale-95 self-start sm:self-auto ${primaryBtnClass}`}
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>Add Expense</span>
@@ -107,20 +115,20 @@ export const ExpenseList: React.FC = () => {
 
       {/* Quick Summary Pill Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
-          <span className="text-[11px] font-medium text-slate-400">Total Filtered Spend</span>
+        <div className="p-4 rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] shadow-sm">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Filtered Spend</span>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono mt-0.5">
             ₹{totalFilteredAmount.toLocaleString('en-IN')}
           </p>
         </div>
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
-          <span className="text-[11px] font-medium text-slate-400">Transactions</span>
+        <div className="p-4 rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] shadow-sm">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Transactions</span>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono mt-0.5">
             {filteredExpenses.length}
           </p>
         </div>
-        <div className="col-span-2 sm:col-span-1 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
-          <span className="text-[11px] font-medium text-slate-400">Avg. Per Expense</span>
+        <div className="col-span-2 sm:col-span-1 p-4 rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] shadow-sm">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Average / Item</span>
           <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono mt-0.5">
             ₹{averageAmount.toLocaleString('en-IN')}
           </p>
@@ -142,7 +150,7 @@ export const ExpenseList: React.FC = () => {
         currentMonthExpenses.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="p-12 text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl">
+          <div className="p-12 text-center bg-white dark:bg-[#101422] border border-slate-200 dark:border-white/[0.08] rounded-3xl">
             <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               No expenses match your search or filter criteria.
             </p>
@@ -155,17 +163,17 @@ export const ExpenseList: React.FC = () => {
                   paymentFilter: 'all',
                 })
               }
-              className="mt-3 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+              className="mt-3 text-xs font-bold text-emerald-400 hover:underline"
             >
               Reset all filters
             </button>
           </div>
         )
       ) : (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] rounded-3xl overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-400 font-semibold text-[11px] uppercase tracking-wider border-b border-slate-200/80 dark:border-slate-800">
+              <thead className="bg-slate-50 dark:bg-white/[0.02] text-slate-400 font-bold text-[10px] uppercase tracking-wider border-b border-slate-200/80 dark:border-white/[0.06]">
                 <tr>
                   <th className="py-3 px-4 sm:px-6">Category & Description</th>
                   <th className="py-3 px-4 hidden sm:table-cell">Date</th>
@@ -174,19 +182,19 @@ export const ExpenseList: React.FC = () => {
                   <th className="py-3 px-4 sm:px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
                 {filteredExpenses.map((exp) => {
                   const cat = getCategory(exp.categoryId);
                   return (
                     <tr
                       key={exp.id}
-                      className="hover:bg-slate-50/60 dark:hover:bg-slate-800/30 transition-colors group"
+                      className="hover:bg-slate-50/60 dark:hover:bg-white/[0.02] transition-colors group"
                     >
                       {/* Category & Description */}
                       <td className="py-4 px-4 sm:px-6">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 border ${cat.bgLight} ${cat.borderColor}`}
+                            className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg shrink-0 border border-white/10 bg-white/[0.04]"
                           >
                             {cat.emoji}
                           </div>
@@ -199,7 +207,7 @@ export const ExpenseList: React.FC = () => {
                               <span>•</span>
                               <span>{exp.date}</span>
                             </div>
-                            <span className="hidden sm:inline-block text-xs text-slate-500 dark:text-slate-400 font-medium">
+                            <span className="hidden sm:inline-block text-xs text-slate-400 font-semibold">
                               {cat.label}
                             </span>
                           </div>
@@ -207,20 +215,20 @@ export const ExpenseList: React.FC = () => {
                       </td>
 
                       {/* Date */}
-                      <td className="py-4 px-4 hidden sm:table-cell text-slate-600 dark:text-slate-300 font-medium">
+                      <td className="py-4 px-4 hidden sm:table-cell text-slate-400 font-medium font-mono text-xs">
                         {exp.date}
                       </td>
 
                       {/* Payment Mode */}
                       <td className="py-4 px-4 hidden md:table-cell">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase font-mono">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-white/[0.05] border border-white/10 text-[10px] font-bold text-emerald-400 uppercase font-mono">
                           {exp.paymentMethod || 'UPI'}
                         </span>
                       </td>
 
                       {/* Amount */}
                       <td className="py-4 px-4 text-right">
-                        <span className="text-base font-extrabold text-slate-900 dark:text-white font-mono">
+                        <span className="text-base font-black text-slate-900 dark:text-white font-mono">
                           ₹{exp.amount.toLocaleString('en-IN')}
                         </span>
                       </td>
@@ -230,14 +238,14 @@ export const ExpenseList: React.FC = () => {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => openEditExpense(exp)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-white/[0.06] transition-colors"
                             title="Edit"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => setExpenseToDelete(exp)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/[0.06] transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="w-4 h-4" />

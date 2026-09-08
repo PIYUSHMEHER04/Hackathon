@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flame, Trophy, Award, CheckCircle } from 'lucide-react';
+import { Flame, Trophy } from 'lucide-react';
 import { useBudget } from '../../context/BudgetContext';
 
 export const StreakCard: React.FC = () => {
@@ -8,18 +8,18 @@ export const StreakCard: React.FC = () => {
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
 
   return (
-    <div className="rounded-3xl bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent border border-amber-300/40 dark:border-amber-700/40 p-6 shadow-sm flex flex-col justify-between">
+    <div className="rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-6 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500 text-white shadow-md shadow-amber-500/25">
-              <Flame className="w-5 h-5 fill-white" />
+            <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 glow-amber">
+              <Flame className="w-5 h-5 fill-amber-400 text-amber-400" />
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-                Financial Discipline
+              <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">
+                Discipline Streak
               </span>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
                 Money Streak
               </h3>
             </div>
@@ -27,7 +27,7 @@ export const StreakCard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('achievements')}
-            className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 flex items-center gap-1"
+            className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1"
           >
             <Trophy className="w-3.5 h-3.5" />
             <span>
@@ -38,26 +38,26 @@ export const StreakCard: React.FC = () => {
 
         <div className="my-2">
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white font-mono tracking-tight">
+            <span className="text-4xl font-black text-slate-900 dark:text-white font-mono tracking-tight text-amber-400">
               🔥 {streak.currentStreak}
             </span>
-            <span className="text-sm font-bold text-slate-500 dark:text-slate-400">
-              day spending streak
+            <span className="text-sm font-bold text-slate-400">
+              day safe streak
             </span>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium leading-relaxed">
             Consecutive days staying within your calculated daily safe spend allowance.
           </p>
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-amber-200/50 dark:border-amber-800/40 flex items-center justify-between text-xs text-amber-700 dark:text-amber-300">
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.06] flex items-center justify-between text-xs text-amber-400/90 font-semibold">
         <span>Personal Best: {streak.bestStreak} days</span>
         <button
           onClick={() => setActiveTab('achievements')}
           className="font-bold hover:underline"
         >
-          View all badges →
+          View badges →
         </button>
       </div>
     </div>

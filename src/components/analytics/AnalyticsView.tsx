@@ -12,7 +12,6 @@ export const AnalyticsView: React.FC = () => {
     categorySummaries,
     overview,
     metrics,
-    selectedMonth,
   } = useBudget();
 
   if (currentMonthExpenses.length === 0) {
@@ -48,12 +47,12 @@ export const AnalyticsView: React.FC = () => {
       {/* Row 1: Donut Chart & Progress Gauge */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Category Donut (Spans 2 columns) */}
-        <div className="lg:col-span-2 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
+        <div className="lg:col-span-2 rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-6 shadow-sm">
           <div className="mb-4">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               Distribution
             </span>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
               Category Donut Breakdown
             </h3>
           </div>
@@ -61,12 +60,12 @@ export const AnalyticsView: React.FC = () => {
         </div>
 
         {/* Circular Budget Progress Gauge (1 column) */}
-        <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm flex flex-col justify-between">
+        <div className="rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               Utilization
             </span>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
               Budget Pace Gauge
             </h3>
           </div>
@@ -82,17 +81,17 @@ export const AnalyticsView: React.FC = () => {
       {/* Row 2: Daily Spending Velocity Chart & Category Ranking */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Daily Spending Timeline (Spans 2 columns) */}
-        <div className="lg:col-span-2 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
+        <div className="lg:col-span-2 rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Timeline Velocity
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                Velocity Timeline
               </span>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
                 Daily Spending & Spikes
               </h3>
             </div>
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 font-mono">
+            <span className="text-xs font-bold text-emerald-400 font-mono">
               Safe: ₹{overview.dailySafeSpend}/day
             </span>
           </div>
@@ -104,12 +103,12 @@ export const AnalyticsView: React.FC = () => {
         </div>
 
         {/* Category Ranking (1 column) */}
-        <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
+        <div className="rounded-3xl bg-white dark:bg-[#101422] border border-slate-200/80 dark:border-white/[0.08] p-6 shadow-sm">
           <div className="mb-4">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               Ranked Outflows
             </span>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
               Category Ranking
             </h3>
           </div>

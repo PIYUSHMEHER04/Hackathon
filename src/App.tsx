@@ -12,6 +12,9 @@ import { ExpenseModal } from './components/expenses/ExpenseModal';
 import { CanIAffordModal } from './components/affordability/CanIAffordModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { SettingsModal } from './components/settings/SettingsModal';
+import { SavingsView } from './components/savings/SavingsView';
+import { SavingsGoalModal } from './components/savings/SavingsGoalModal';
+import { SavingsDepositModal } from './components/savings/SavingsDepositModal';
 import { Toast } from './components/common/Toast';
 import { PrintableReport } from './components/export/PrintableReport';
 
@@ -40,6 +43,7 @@ const MainLayout: React.FC = () => {
           {/* Tab View Switching */}
           {activeTab === 'dashboard' && <DashboardView />}
           {activeTab === 'expenses' && <ExpenseList />}
+          {activeTab === 'savings' && <SavingsView />}
           {activeTab === 'analytics' && <AnalyticsView />}
           {activeTab === 'history' && <MonthlyHistoryView />}
           {activeTab === 'achievements' && <AchievementsModal />}
@@ -57,6 +61,8 @@ const MainLayout: React.FC = () => {
       <CanIAffordModal />
       <OnboardingModal />
       <SettingsModal />
+      <SavingsGoalModal />
+      <SavingsDepositModal />
       <Toast />
     </div>
   );

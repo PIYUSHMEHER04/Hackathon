@@ -4,7 +4,8 @@ import { getCurrentMonthKey, generateDemoData } from '../constants/demoData';
 const STORAGE_KEY = 'campuSpend_state_v1';
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
-  theme: 'light',
+  theme: 'dark',
+  themePalette: 'emerald',
   hasCompletedOnboarding: false,
   demoModeActive: false,
   studentName: 'Student Engineer',
@@ -19,9 +20,11 @@ export const getInitialState = (): AppState => {
         month: currentMonth,
         totalBudget: 15000,
         weeklyBudget: 3750,
+        savingsTarget: 2000,
       },
     },
     expenses: [],
+    savingsGoals: [],
     preferences: DEFAULT_PREFERENCES,
     selectedMonth: currentMonth,
   };
@@ -42,6 +45,7 @@ export const loadStorageState = (): AppState => {
     const state: AppState = {
       budgets: parsed.budgets && typeof parsed.budgets === 'object' ? parsed.budgets : {},
       expenses: Array.isArray(parsed.expenses) ? parsed.expenses : [],
+      savingsGoals: Array.isArray(parsed.savingsGoals) ? parsed.savingsGoals : [],
       preferences: {
         ...DEFAULT_PREFERENCES,
         ...(parsed.preferences || {}),
@@ -55,6 +59,7 @@ export const loadStorageState = (): AppState => {
         month: currentMonth,
         totalBudget: 15000,
         weeklyBudget: 3750,
+        savingsTarget: 2000,
       };
     }
 
@@ -82,14 +87,16 @@ export const clearStorageState = (): void => {
 };
 
 export const seedDemoState = (): AppState => {
-  const { budgets, expenses } = generateDemoData();
+  const { budgets, expenses, savingsGoals } = generateDemoData();
   const currentMonth = getCurrentMonthKey();
 
   const demoState: AppState = {
     budgets,
     expenses,
+    savingsGoals,
     preferences: {
-      theme: (localStorage.getItem('campuSpend_theme') as 'light' | 'dark') || 'light',
+      theme: (localStorage.getItem('campuSpend_theme') as 'light' | 'dark') || 'dark',
+      themePalette: 'emerald',
       hasCompletedOnboarding: true,
       demoModeActive: true,
       studentName: 'Alex (CSE)',

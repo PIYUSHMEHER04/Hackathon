@@ -1,4 +1,4 @@
-import { Expense, MonthlyBudget } from '../types';
+import { Expense, MonthlyBudget, SavingsGoal } from '../types';
 
 export const getCurrentMonthKey = (): string => {
   const now = new Date();
@@ -21,6 +21,7 @@ export const getPreviousMonthKey = (): string => {
 export const generateDemoData = (): {
   budgets: Record<string, MonthlyBudget>;
   expenses: Expense[];
+  savingsGoals: SavingsGoal[];
 } => {
   const currentMonth = getCurrentMonthKey();
   const previousMonth = getPreviousMonthKey();
@@ -220,17 +221,49 @@ export const generateDemoData = (): {
     },
   ];
 
+  const savingsGoals: SavingsGoal[] = [
+    {
+      id: 'demo-goal-1',
+      title: 'Goa Batch Trip',
+      targetAmount: 5000,
+      currentAmount: 3200,
+      emoji: '🏖️',
+      notes: 'Semester break outing with hostel mates',
+      createdAt: Date.now() - 20 * 86400000,
+    },
+    {
+      id: 'demo-goal-2',
+      title: 'Coding Mechanical Keyboard',
+      targetAmount: 3000,
+      currentAmount: 1800,
+      emoji: '⌨️',
+      notes: 'For coding and hackathon setups',
+      createdAt: Date.now() - 10 * 86400000,
+    },
+    {
+      id: 'demo-goal-3',
+      title: 'Emergency Semester Buffer',
+      targetAmount: 2500,
+      currentAmount: 2000,
+      emoji: '🛡️',
+      notes: 'Unexpected travel or clinic buffer',
+      createdAt: Date.now() - 30 * 86400000,
+    },
+  ];
+
   const budgets: Record<string, MonthlyBudget> = {
     [currentMonth]: {
       month: currentMonth,
       totalBudget: 15000,
       weeklyBudget: 3750,
+      savingsTarget: 2000,
       primaryCategories: ['food', 'transport', 'stationery', 'entertainment'],
     },
     [previousMonth]: {
       month: previousMonth,
       totalBudget: 14000,
       weeklyBudget: 3500,
+      savingsTarget: 1500,
       primaryCategories: ['food', 'transport', 'stationery'],
     },
   };
@@ -238,5 +271,6 @@ export const generateDemoData = (): {
   return {
     budgets,
     expenses: [...currentExpenses, ...previousExpenses],
+    savingsGoals,
   };
 };

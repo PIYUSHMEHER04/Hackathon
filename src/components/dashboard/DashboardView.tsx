@@ -9,6 +9,7 @@ import { RecentExpenses } from './RecentExpenses';
 import { QuickAffordCard } from './QuickAffordCard';
 import { StreakCard } from '../gamification/StreakCard';
 import { InsightsView } from '../insights/InsightsView';
+import { SavingsCard } from './SavingsCard';
 
 export const DashboardView: React.FC = () => {
   return (
@@ -19,13 +20,16 @@ export const DashboardView: React.FC = () => {
       {/* Hero Master Budget Overview Card */}
       <BudgetOverviewCard />
 
-      {/* Differentiating Feature Grid: Safe Spend + Projection + Weekly + Streak */}
+      {/* Differentiating Feature Grid: Safe Spend + Projection + Savings + Weekly + Streak */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Core Differentiator: Daily Safe Spend */}
         <DailySafeSpendCard />
 
         {/* Predictive Intelligence: End-of-month Projection */}
         <ProjectionCard />
+
+        {/* Dedicated Student Savings Vault Card */}
+        <SavingsCard />
 
         {/* Intermediate Control: Weekly Spending Limit */}
         <WeeklyBudgetCard />
@@ -37,7 +41,7 @@ export const DashboardView: React.FC = () => {
         <StreakCard />
 
         {/* Deterministic Rule-Based Intelligence: Insights preview */}
-        <div className="md:col-span-2 lg:col-span-1">
+        <div className="md:col-span-2 lg:col-span-3">
           <InsightsView />
         </div>
       </div>

@@ -76,15 +76,20 @@ export const calculateBudgetOverview = (
   monthMetrics: MonthDateMetrics
 ) => {
   const totalBudget = Math.max(0, budget?.totalBudget ?? 0);
+  const savingsTarget = Math.max(0, budget?.savingsTarget ?? 0);
+  const spendableBudget = Math.max(0, totalBudget - savingsTarget);
   const totalSpent = expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
   const remainingBudget = totalBudget - totalSpent;
+  const remainingSpendable = spendableBudget - totalSpent;
   const percentage = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : totalSpent > 0 ? 100 : 0;
+  const isDippingIntoSavings = savingsTarget > 0 && totalSpent > spendableBudget && remainingBudget >= 0;
 
-  // Smart daily safe spend calculation
+  // Smart daily safe spend calculation (protects savings target if set)
   let dailySafeSpend = 0;
-  if (remainingBudget > 0) {
+  const spendPool = savingsTarget > 0 ? remainingSpendable : remainingBudget;
+  if (spendPool > 0) {
     const daysToSpread = monthMetrics.isPastMonth ? 1 : Math.max(1, monthMetrics.daysRemaining);
-    dailySafeSpend = Math.round(remainingBudget / daysToSpread);
+    dailySafeSpend = Math.round(spendPool / daysToSpread);
   } else {
     dailySafeSpend = 0;
   }
@@ -98,6 +103,10 @@ export const calculateBudgetOverview = (
 
   return {
     totalBudget,
+    savingsTarget,
+    spendableBudget,
+    remainingSpendable,
+    isDippingIntoSavings,
     totalSpent,
     remainingBudget,
     percentage: Math.min(Math.round(percentage * 10) / 10, 999),

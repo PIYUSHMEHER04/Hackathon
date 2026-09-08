@@ -6,6 +6,7 @@ import {
   CategorySpendSummary,
   Expense,
   MonthlyBudget,
+  SavingsGoal,
   SpendingInsight,
   UserPreferences,
 } from '../types';
@@ -31,6 +32,7 @@ import { getCurrentMonthKey } from '../constants/demoData';
 export type NavigationTab =
   | 'dashboard'
   | 'expenses'
+  | 'savings'
   | 'analytics'
   | 'history'
   | 'achievements'
@@ -78,11 +80,32 @@ interface BudgetContextType {
   isSettingsOpen: boolean;
   openSettings: () => void;
   closeSettings: () => void;
+  // Savings Modals
+  isSavingsModalOpen: boolean;
+  editingSavingsGoal: SavingsGoal | null;
+  openSavingsModal: (goal?: SavingsGoal) => void;
+  closeSavingsModal: () => void;
+  isDepositModalOpen: boolean;
+  depositTargetGoal: SavingsGoal | null;
+  openDepositModal: (goal: SavingsGoal) => void;
+  closeDepositModal: () => void;
   // Actions
   addExpense: (expense: Omit<Expense, 'id' | 'createdAt'>) => void;
   updateExpense: (id: string, updated: Partial<Expense>) => void;
   deleteExpense: (id: string) => void;
-  setBudgetForMonth: (monthKey: string, totalBudget: number, weeklyBudget?: number) => void;
+  setBudgetForMonth: (monthKey: string, totalBudget: number, weeklyBudget?: number, savingsTarget?: number) => void;
+  // Savings Actions
+  savingsGoals: SavingsGoal[];
+  totalSaved: number;
+  addSavingsGoal: (goal: Omit<SavingsGoal, 'id' | 'createdAt'>) => void;
+  updateSavingsGoal: (id: string, updated: Partial<SavingsGoal>) => void;
+  deleteSavingsGoal: (id: string) => void;
+  depositToGoal: (id: string, amount: number) => void;
+  withdrawFromGoal: (id: string, amount: number) => void;
+  setSavingsTarget: (monthKey: string, savingsTarget: number) => void;
+  // App Preferences
+  themePalette: 'emerald' | 'violet' | 'cyan';
+  setThemePalette: (palette: 'emerald' | 'violet' | 'cyan') => void;
   toggleTheme: () => void;
   toggleDemoMode: () => void;
   resetDemoData: () => void;
@@ -105,6 +128,10 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [isAffordModalOpen, setIsAffordModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSavingsModalOpen, setIsSavingsModalOpen] = useState(false);
+  const [editingSavingsGoal, setEditingSavingsGoal] = useState<SavingsGoal | null>(null);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+  const [depositTargetGoal, setDepositTargetGoal] = useState<SavingsGoal | null>(null);
 
   // Sync state with localStorage
   useEffect(() => {
@@ -245,19 +272,137 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     showToast('Expense deleted.', 'warning');
   };
 
-  const setBudgetForMonth = (monthKey: string, totalBudget: number, weeklyBudget?: number) => {
+  const setBudgetForMonth = (
+    monthKey: string,
+    totalBudget: number,
+    weeklyBudget?: number,
+    savingsTarget?: number
+  ) => {
     setState((prev) => ({
       ...prev,
       budgets: {
         ...prev.budgets,
         [monthKey]: {
+          ...prev.budgets[monthKey],
           month: monthKey,
           totalBudget,
           weeklyBudget: weeklyBudget || Math.round(totalBudget / 4),
+          savingsTarget:
+            savingsTarget !== undefined
+              ? savingsTarget
+              : prev.budgets[monthKey]?.savingsTarget ?? 0,
         },
       },
     }));
     showToast(`Budget set to ₹${totalBudget.toLocaleString('en-IN')}.`, 'success');
+  };
+
+  const setSavingsTarget = (monthKey: string, savingsTarget: number) => {
+    setState((prev) => ({
+      ...prev,
+      budgets: {
+        ...prev.budgets,
+        [monthKey]: {
+          ...(prev.budgets[monthKey] || {
+            month: monthKey,
+            totalBudget: 15000,
+            weeklyBudget: 3750,
+          }),
+          savingsTarget: Math.max(0, savingsTarget),
+        },
+      },
+    }));
+    showToast(`Savings target updated to ₹${savingsTarget.toLocaleString('en-IN')}.`, 'success');
+  };
+
+  const savingsGoals = useMemo(() => state.savingsGoals || [], [state.savingsGoals]);
+
+  const totalSaved = useMemo(() => {
+    return savingsGoals.reduce((sum, g) => sum + (g.currentAmount || 0), 0);
+  }, [savingsGoals]);
+
+  const addSavingsGoal = (newGoal: Omit<SavingsGoal, 'id' | 'createdAt'>) => {
+    const goal: SavingsGoal = {
+      ...newGoal,
+      id: `goal-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      createdAt: Date.now(),
+    };
+    setState((prev) => ({
+      ...prev,
+      savingsGoals: [...(prev.savingsGoals || []), goal],
+    }));
+    triggerConfetti();
+    showToast(`Savings goal "${goal.title}" created! 🎯`, 'success');
+  };
+
+  const updateSavingsGoal = (id: string, updated: Partial<SavingsGoal>) => {
+    setState((prev) => ({
+      ...prev,
+      savingsGoals: (prev.savingsGoals || []).map((g) => (g.id === id ? { ...g, ...updated } : g)),
+    }));
+    showToast('Savings goal updated.', 'info');
+  };
+
+  const deleteSavingsGoal = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      savingsGoals: (prev.savingsGoals || []).filter((g) => g.id !== id),
+    }));
+    showToast('Savings goal removed.', 'warning');
+  };
+
+  const depositToGoal = (id: string, amount: number) => {
+    if (amount <= 0) return;
+    let reachedTarget = false;
+    let goalTitle = '';
+    setState((prev) => ({
+      ...prev,
+      savingsGoals: (prev.savingsGoals || []).map((g) => {
+        if (g.id === id) {
+          goalTitle = g.title;
+          const newAmount = g.currentAmount + amount;
+          if (newAmount >= g.targetAmount && g.currentAmount < g.targetAmount) {
+            reachedTarget = true;
+          }
+          return { ...g, currentAmount: newAmount };
+        }
+        return g;
+      }),
+    }));
+
+    if (reachedTarget) {
+      triggerConfetti();
+      showToast(`🎉 Target reached for "${goalTitle}"! Amazing job!`, 'success');
+    } else {
+      showToast(`Deposited ₹${amount.toLocaleString('en-IN')} to "${goalTitle}"`, 'success');
+    }
+  };
+
+  const withdrawFromGoal = (id: string, amount: number) => {
+    if (amount <= 0) return;
+    setState((prev) => ({
+      ...prev,
+      savingsGoals: (prev.savingsGoals || []).map((g) => {
+        if (g.id === id) {
+          return { ...g, currentAmount: Math.max(0, g.currentAmount - amount) };
+        }
+        return g;
+      }),
+    }));
+    showToast(`Withdrew ₹${amount.toLocaleString('en-IN')}.`, 'info');
+  };
+
+  const themePalette = state.preferences.themePalette || 'emerald';
+
+  const setThemePalette = (palette: 'emerald' | 'violet' | 'cyan') => {
+    setState((prev) => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        themePalette: palette,
+      },
+    }));
+    showToast(`Switched accent to ${palette.toUpperCase()}`, 'info');
   };
 
   const toggleTheme = () => {
@@ -369,11 +514,43 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         isSettingsOpen,
         openSettings: () => setIsSettingsOpen(true),
         closeSettings: () => setIsSettingsOpen(false),
+        // Savings Modals
+        isSavingsModalOpen,
+        editingSavingsGoal,
+        openSavingsModal: (goal?: SavingsGoal) => {
+          setEditingSavingsGoal(goal || null);
+          setIsSavingsModalOpen(true);
+        },
+        closeSavingsModal: () => {
+          setIsSavingsModalOpen(false);
+          setEditingSavingsGoal(null);
+        },
+        isDepositModalOpen,
+        depositTargetGoal,
+        openDepositModal: (goal: SavingsGoal) => {
+          setDepositTargetGoal(goal);
+          setIsDepositModalOpen(true);
+        },
+        closeDepositModal: () => {
+          setIsDepositModalOpen(false);
+          setDepositTargetGoal(null);
+        },
         // Actions
         addExpense,
         updateExpense,
         deleteExpense,
         setBudgetForMonth,
+        // Savings Actions
+        savingsGoals,
+        totalSaved,
+        addSavingsGoal,
+        updateSavingsGoal,
+        deleteSavingsGoal,
+        depositToGoal,
+        withdrawFromGoal,
+        setSavingsTarget,
+        themePalette,
+        setThemePalette,
         toggleTheme,
         toggleDemoMode,
         resetDemoData,
